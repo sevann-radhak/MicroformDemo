@@ -1,0 +1,117 @@
+﻿@page
+@model MicroformAzure.Web.Pages.PaymentsHistoryModel
+@{
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <br clear="all" />
+            <h1 style="text-align: center">Payment History <strong>@Model.PayerId</strong></h1>
+            @*<h2 style="text-align: center">Customer Id: <strong>@Model.PaymentRequests.CustomerId</strong></h2>*@
+
+            <div class="container py-5 col-md-12">
+                @if(Model.PaymentRequests.Requests.Any()){
+                <table class="table table-hover table-responsive table-striped" id="PaymentInstrumentsTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().ApplicationName)                                
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().OrderCode)                                
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().RequestCreatedTime)                                
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().Currency)                                
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().TotalAmount)                                
+                            </th>
+
+                            <th> 
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().ReturnDesicion)                                                                
+                            </th>
+
+                            <th> 
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().ReturnResult)                                                                
+                            </th>
+
+                            <th> 
+                                @Html.DisplayNameFor(model => model.PaymentRequests.Requests.FirstOrDefault().ResultCreatedTime)                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PaymentRequests.Requests)
+                        {
+                            <tr>
+                                <td> @item.ApplicationName
+                                </td>
+                                
+                                <td> @item.OrderCode
+                                </td>
+
+                                <td> @item.RequestCreatedTime
+                                </td>
+
+                                <td> @item.Currency
+                                </td>
+
+                                <td> @item.TotalAmount
+                                </td>
+
+                                <td> @item.ReturnDesicion
+                                </td>
+
+                                <td> @item.ReturnResult
+                                </td>
+
+                                <td> @item.ResultCreatedTime
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+                else
+                {
+                    <div class="card card-body">
+                        <p class="align-content-center">
+                            No data found!
+                        </p>
+                    </div>
+                }
+
+                <div class="row float-right m-2">
+                    <input type="hidden" id="urlRedirectTo" name="urlRedirectTo" asp-for="@Model.PaymentRequests.UrlRedirectAfterPayment">                    
+                    <button class="btn btn-primary redirectToUrl">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#PaymentInstrumentsTable').DataTable();
+        var urlRedirectTo = document.querySelector('#urlRedirectTo').value;
+
+        $('.redirectToUrl').click((e) => {
+                var url = urlRedirectTo;
+                window.location.href = url;
+            });
+    });
+</script>
+}

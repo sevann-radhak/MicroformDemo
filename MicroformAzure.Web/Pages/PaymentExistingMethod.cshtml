@@ -1,0 +1,227 @@
+﻿@*@page
+@model MicroformAzure.Web.Pages.PaymentExistingMethodModel
+@{
+}
+
+<style>
+    .rounded {
+        border-radius: 1rem
+    }
+</style>
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.PaymentModel.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">        
+            <div class="col-md-12">
+                <div class="col-md-2" style="float: right">
+                    <a data-toggle="pill" class="btn btn-primary nav-item nav-link eCheck text-white"> <i class="fas fa-money-check-alt mr-2"></i> eCheck </a>
+                </div>
+            </div>
+            <br clear="all" />
+            <h1 style="text-align: center">Payment Instruments <strong>@Model.PaymentModel.CustomerModel.Id</strong></h1>
+
+            <div class="container py-5 col-md-8">
+                <div class="col-md-12 mb-2">
+                    <div style="float: right">
+                        <div class="row">
+                            <div class="pull-left">
+                                @if (Model.PaymentModel.CustomerModel != null)
+                                {
+                                    <input type="hidden" id="payerId" name="payerId" asp-for="PaymentModel.CustomerModel.ClientReferenceInformationCode">
+                                    <button class="btn btn-light btn-sm history mr-1 text-white"> <i class="fas fa-history mr-2"></i> </button>
+                                }
+                            </div>
+
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-primary btn-sm createItem" name="createPaymentInstrument" value="@Model.PaymentModel.ApplicationName,@Model.PaymentModel.CustomerModel.Id,@Model.PaymentModel.AccessCode"><i class="fas fa-plus mr-2"></i>New</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br clear="all" />
+
+                <form method="post">
+                    <table class="table table-hover table-responsive table-striped" id="PaymentInstrumentsTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+
+                                <th>
+                                </th>
+
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PaymentModel.CustomerModel.PaymentInstruments)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input id="@item.Id" name="paymentInstrumentId" type="radio" value="@item.Id" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 100%">
+                                        <div class="col-md-12">
+                                            <div class="payment-card bg-light rounded p-3">
+                                                <i class="fa fa-cc-visa payment-icon-big text-success"></i>
+                                                <h2>
+                                                    @item.InstrumentIdentifier.Number
+                                                </h2>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <small>
+                                                            <strong>Expiry date:</strong> @item.PaymentInstrumentInfo.CardExpirationMonth / @item.PaymentInstrumentInfo.CardExpirationYear
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-sm-6 text-right">
+                                                        <small>
+                                                            <strong>Name:</strong> @item.PaymentInstrumentInfo.BillToFirstName @item.PaymentInstrumentInfo.BillToLastName
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td style="white-space: nowrap;">
+                                        <div class="row m-1">
+                                            <button type="button" class="btn btn-info btn-sm seeItem" name="seePaymentInstrument" data-toggle="modal" data-id="@item.Id" data-target="#detailDialog">See</button>
+                                        </div>
+                                        <div class="row m-1">
+                                            <button type="button" class="btn btn-warning btn-sm updateItem" name="updatePaymentInstrumentId" value="@item.Id,@item.InstrumentIdentifier.InstrumentIdentifierId,@Model.PaymentModel.AccessCode">Edit</button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <div class="modal fade" id="detailDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title bold" id="exampleModalLabel">@item.InstrumentIdentifier.Number</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <ul class="list-group list-group-flush">
+                                                                <li class="list-group-item"><label><strong>Id:</strong></label> @item.Id</li>
+                                                                <li class="list-group-item"><label><strong>State:</strong></label> @item.State</li>
+                                                                <li class="list-group-item"><label><strong>Bill To First Name:</strong></label> @item.PaymentInstrumentInfo.BillToFirstName</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Last Name:</strong></label> @item.PaymentInstrumentInfo.BillToLastName</li>
+                                                                <li class="list-group-item"><label><strong>Card Expiration Month:</strong></label> @item.PaymentInstrumentInfo.CardExpirationMonth</li>
+                                                                <li class="list-group-item"><label><strong>Card Expiration Year:</strong></label> @item.PaymentInstrumentInfo.CardExpirationYear</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Address 1:</strong></label> @item.PaymentInstrumentInfo.BillToAddress1</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Administrative Area:</strong></label> @item.PaymentInstrumentInfo.BillToAdministrativeArea</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Company:</strong></label> @item.PaymentInstrumentInfo.BillToCompany</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Country:</strong></label> @item.PaymentInstrumentInfo.BillToCountry</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Email:</strong></label> @item.PaymentInstrumentInfo.BillToEmail</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Locality:</strong></label> @item.PaymentInstrumentInfo.BillToLocality</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Phone Number:</strong></label> @item.PaymentInstrumentInfo.BillToPhoneNumber</li>
+                                                                <li class="list-group-item"><label><strong>Bill To Postal Code:</strong></label> @item.PaymentInstrumentInfo.BillToPostalCode</li>
+                                                                <li class="list-group-item"><label><strong>Instrument Identifier Id:</strong></label> @item.PaymentInstrumentInfo.InstrumentIdentifierId</li>
+                                                                <li class="list-group-item"><label><strong>Instrument Identifier State:</strong></label> @item.InstrumentIdentifier.State</li>
+                                                                <li class="list-group-item"><label><strong>Shipping Address Id:</strong></label> @Model.PaymentModel.CustomerModel.ShippingAddressId</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" id="accessCode" name="accessCode" asp-for="PaymentModel.AccessCode">
+                    <input type="hidden" id="customerId" name="customerId" asp-for="PaymentModel.CustomerModel.Id">
+                    <input type="hidden" id="applicationName" name="applicationName" asp-for="PaymentModel.ApplicationName">
+                    <input type="hidden" id="shippingAddressId" name="shippingAddressId" asp-for="PaymentModel.CustomerModel.ShippingAddressId">
+
+                    <div class="mt-5">
+                        <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm"> Pay </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#PaymentInstrumentsTable').DataTable();
+        $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+            $(".alert-dismissible").alert('close');
+        });
+
+        var item_to_create;
+        var item_to_update;
+        var accessCode = document.querySelector('#accessCode').value;
+        var appName = document.querySelector('#applicationName').value;
+        var customerId = document.querySelector('#customerId').value;
+
+        $('.createItem').click((e) => {
+            item_to_create = e.currentTarget.value;
+            var subs = item_to_create.toString().split(',');
+            var applicationName = subs[0];
+            var customerId = subs[1];
+            var accessCode = subs[2];
+
+            var url_destination = `/PaymentInstrumentCreate?accessCode=${accessCode}&applicationName=${applicationName}&customerId=${customerId}`;
+            window.location.href = url_destination;
+        });
+
+        $('.updateItem').click((e) => {
+            item_to_update = e.currentTarget.value;
+            var subs = item_to_update.toString().split(',');
+            var paymentInstrumentId = subs[0];
+            var instrumentIdentifierId = subs[1];
+            var applicationName = appName;
+            var accessCodeVal = accessCode;
+            var customer = customerId;
+
+            var url_destination = `/PaymentInstrumentUpdate?paymentInstrumentId=${paymentInstrumentId}&instrumentIdentifierId=${instrumentIdentifierId}&applicationName=${applicationName}&customerId=${customer}&accessCode=${accessCodeVal}`;
+            window.location.href = url_destination;
+        });
+
+        $('.eCheck').click((e) => {
+            var applicationName = appName;
+
+            var url_destination = `/PaymentElectronicCheckDebits?accessCode=${accessCode}&applicationName=${applicationName}`;
+            window.location.href = url_destination;
+        });
+        
+        $('.history').click((e) => {
+            var applicationName = appName;
+            var payerId = document.querySelector('#payerId').value;
+
+            var url_destination = `/PaymentsHistory?payerId=${payerId}&applicationName=${applicationName}`;
+            window.location.href = url_destination;
+        });
+    });
+</script>
+}*@

@@ -1,0 +1,147 @@
+﻿@page
+@model MicroformAzure.Web.Pages.PaymentInstrumentCreateModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <h1 style="text-align: center">Create Payment Instrument</h1>
+
+            <form id="my-sample-form" method="POST">
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-lg-6 mx-auto">
+                            <div class="card ">
+                                <div class="card-header">
+                                    <div class="tab-content">
+
+                                        <div class="form-group">
+                                            <label for="cardNumber"><h6>Card Number</h6></label>
+                                            <input asp-for="PaymInstr.CardNumber" class="form-control" name="cardNumber" placeholder="Card Number" type="text" required />
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <span class="hidden-xs">
+                                                            <h6>Expiration Date</h6>
+                                                        </span>
+                                                    </label>
+
+                                                    <div class="input-group">
+                                                        <select asp-for="PaymInstr.CardExpirationMonth" id="expMonth" name="cardExpirationMonth" placeholder="MM" class="form-control" required>
+                                                            <option>01</option>
+                                                            <option>02</option>
+                                                            <option>03</option>
+                                                            <option>04</option>
+                                                            <option>05</option>
+                                                            <option>06</option>
+                                                            <option>07</option>
+                                                            <option>08</option>
+                                                            <option>09</option>
+                                                            <option>10</option>
+                                                            <option>11</option>
+                                                            <option>12</option>
+                                                        </select>
+
+                                                        <input asp-for="PaymInstr.CardExpirationYear" name="cardExpirationYear" type="number" id="expYear" placeholder="YYYY" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-1 rounded" style="border: 1px solid #560bad">
+                                            <div class="form-group">
+                                                <label for="billToFirstName"><h6>First Name</h6></label>
+                                                <input asp-for="PaymInstr.BillToFirstName" class="form-control" name="billToFirstName" placeholder="First Name" type="text" required />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="billToLastName"><h6>Last Name</h6></label>
+                                                <input asp-for="PaymInstr.BillToLastName" class="form-control" name="billToLastName" placeholder="Last Name" type="text" required />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="billToEmail"> <h6>Email</h6> </label>
+                                                <input asp-for="PaymInstr.BillToEmail" class="form-control" name="billToEmail" placeholder="Email" type="text" required />
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-group">
+                                                        <label for="billToAddress1"><h6>Address</h6></label>
+                                                        <input asp-for="PaymInstr.BillToAddress1" class="form-control" name="billToAddress1" placeholder="Address" type="text" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group mb-4">
+                                                        <label for="billToPostalCode"> <h6>Postal Code</h6> </label>
+                                                        <input asp-for="PaymInstr.BillToPostalCode" class="form-control" name="billToPostalCode" placeholder="Postal Code" type="text" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group mb-4">
+                                                        <label for="billToPhoneNumber"> <h6>Phone Number</h6> </label>
+                                                        <input asp-for="PaymInstr.BillToPhoneNumber" class="form-control" name="billToPhoneNumber" placeholder="Phone Number" type="text" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group mb-4">
+                                                        <label for="billToCompany"> <h6>Compay</h6> </label>
+                                                        <input asp-for="PaymInstr.BillToCompany" class="form-control" name="billToCompany" placeholder="Company" type="text" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group mb-4">
+                                                        <label for="billToAdministrativeArea"><h6>Prov./State</h6></label>
+                                                        <input asp-for="PaymInstr.BillToAdministrativeArea" class="form-control" name="billToAdministrativeArea" placeholder="Prov./State" type="text" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <div class="form-group">
+                                                        <label for="billToLocality"> <h6>City</h6> </label>
+                                                        <input asp-for="PaymInstr.BillToLocality" class="form-control" name="billToLocality" placeholder="City" type="text" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group mb-4">
+                                                        <label for="billToCountry"> <h6>Country</h6> </label>
+                                                        <input asp-for="PaymInstr.BillToCountry" class="form-control" name="billToCountry" placeholder="Country" type="text" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="credit-card" class="tab-pane fade show active pt-3">
+                                                <input asp-for="ApplicationName" id="applicationName" name="applicationName" type="hidden" />
+                                                <input asp-for="CustomerId" id="customerId" name="customerId" type="hidden" />
+                                                <input asp-for="PaymInstr.AccessCode" id="accessCode" name="accessCode" type="hidden" />
+
+                                                <div class="card-footer">
+                                                    <button type="submit" id="pay-button" class="btn btn-primary btn-block shadow-sm"> Create </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

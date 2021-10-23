@@ -1,0 +1,346 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" />
+
+<style>
+    #number-container, #securityCode-container {
+        height: 38px;
+    }
+
+    .fa-cc-visa {
+        color: #1A1F71;
+    }
+
+    .flex-microform-focused {
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    a.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    body {
+        background: #f5f5f5
+    }
+
+    .rounded {
+        border-radius: 1rem
+    }
+
+    .nav-pills .nav-link {
+        color: #555
+    }
+
+    .nav-pills .nav-link.active {
+        color: white
+    }
+
+    input[type="radio"] {
+        margin-right: 5px
+    }
+
+    .bold {
+        font-weight: bold
+    }
+</style>
+
+<div class="container card @Model.PaymentModel.ApplicationName">
+    <div class="card-body bg-light m-3 p-3">
+        <h1 style="text-align: center">Checkout <strong>@Model.PaymentModel.ApplicationName</strong> style</h1>
+
+        <div class="float-right">
+            @if (Model.PaymentModel.PaymentInstruments.Any())
+            {
+                <input type="hidden" id="payerId" name="payerId" asp-for="PaymentModel.ClientReferenceInformationCode">
+                <button class="btn btn-info btn-sm history mr-1 text-white"> <i class="fas fa-history mr-2"></i> </button>
+            }
+        </div>
+
+        <div class="col-md-6 col-lg-6 mt-5" style="margin: 0 auto; text-align: center">
+            HOW WOULD YOU LIKE TO MAKE YOUR DEPOSIT?
+            <div class="row text-center">
+                <div class="col text-center">
+                    <button class="btn btn-outline-primary btn-lg eCheck">eCheck</button>
+                    <br />
+                    <i class="fas fa-money-check-alt fa-5x mr-2"></i>
+                </div>
+
+                <div class="col">                    
+                    <button class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#flexTokenDialog">CREDIT</button>
+                    <br />
+                    <i class="fas fa fa-cc-visa fa-5x" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.PaymentModel.PaymentInstruments.Any())
+        {
+            <div class="container col-md-6">
+                <div class="text-center mt-5">
+                    DEPOSIT WITH
+                </div>
+
+                <div class="align-content-center text-center">
+                    <button type="button" class="btn btn-link btn-sm createItem" data-toggle="modal" data-target="#flexTokenDialog">
+                        Pay with another Card
+                        <i class="fas fa-plus mr-2"></i>
+                    </button>
+                </div>
+
+                <form method="post" asp-page-handler="AuthorizationWithCustomerIdAndPaymentInstrumentId">
+                    <table class="table table-hover table-striped col-md-12" id="PaymentInstrumentsTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+
+                                <th>
+                                </th>
+
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PaymentModel.PaymentInstruments)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle;">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input id="@item.Id" name="paymentInformation" type="radio" value="@item.PaymentInstrumentInfo.CustomerId,@item.PaymentInstrumentInfo.PaymentInstrumentId,@item.PaymentInstrumentInfo.ShippingAddressId" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="col-md-12">
+                                            <div class="payment-card rounded">
+                                                <div class="row pl-3 pr-3">
+                                                    <i class="fa fa-cc-visa payment-icon-big text-success"></i>
+                                                    &nbsp; <h4>@item.InstrumentIdentifier.Number</h4>
+                                                </div>
+                                                <label class="pl-3 pr-3">
+                                                    <strong>@item.PaymentInstrumentInfo.BillToFirstName @item.PaymentInstrumentInfo.BillToLastName </strong>
+                                                    &nbsp; @item.PaymentInstrumentInfo.CardExpirationMonth/@item.PaymentInstrumentInfo.CardExpirationYear
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td style="vertical-align: middle;">
+                                        <div class="row">
+                                            <button type="button" class="btn btn-warning btn-sm updateItem m-1" name="updatePaymentInstrumentId" value="@item.Id,@item.InstrumentIdentifier.InstrumentIdentifierId,@Model.PaymentModel.AccessCode"><i class="fa fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm deleteItem m-1" data-id="@item.Id" data-toggle="modal" data-target="#deleteDialog" name="deletePaymentInstrumentId"><i class="fa fa-trash"></i></button>
+                                        </div>                                        
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" id="accessCode" name="accessCode" asp-for="PaymentModel.AccessCode">
+                    <input type="hidden" id="applicationName" name="applicationName" asp-for="PaymentModel.ApplicationName">
+                    
+
+                    <div class="mt-5">
+                        <button type="submit" id="submitbutton" class="subscribe btn btn-primary btn-block shadow-sm"> Pay </button>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade col-md-12" id="flexTokenDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title bold" id="exampleModalLabel">New Payment method</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="row">
+                        <form id="my-sample-form" method="POST">
+                            <div class="container py-5">
+                                <div class="row">
+                                    <div class="col-lg-12 mx-12">
+                                        <div class="card ">
+                                            <div class="card-header">
+                                                <!-- Credit card form content -->
+                                                <div class="tab-content">
+
+                                                    <partial name="_BillingInfo" />
+
+                                                    <div class="p-1 mt-1 rounded" style="border: 1px solid #f72585">
+
+                                                        <!-- credit card info-->
+                                                        <div id="credit-card" class="tab-pane fade show active pt-3">
+                                                                                                                        
+                                                            <partial name="_FlexForm" />
+                                                            
+                                                            <input type="hidden" id="accessCode" name="accessCode" asp-for="PaymentModel.AccessCode">
+                                                            <input type="hidden" id="flexresponse" name="flexresponse" asp-for="flexresponse">
+                                                            <input type="hidden" id="paymentsModel" name="paymentsModel" asp-for="PaymentModel.PaymentInstruments">
+                                                            <input type="hidden" id="applicationName" name="applicationName" asp-for="PaymentModel.ApplicationName">
+                                                            <input type="hidden" id="ExecutionExact" name="ExecutionExact" asp-for="PaymentModel.ExecutionExact">
+
+                                                            <div class="card-footer">
+                                                                <button type="button" id="pay-button" class="subscribe btn btn-primary btn-block shadow-sm"> Pay </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+<script src="https://flex.cybersource.com/cybersource/assets/microform/0.11/flex-microform.min.js"></script>
+
+<script type="text/javascript">
+
+
+    if (document.getElementById('ExecutionExact')) {
+        let eevalue = Date.parse(document.getElementById('ExecutionExact').value);
+        console.log(eevalue);        
+        if (eevalue > Date.now()) {
+            document.getElementById('pay-button').innerHTML = 'Scheduled Payment';
+        }
+    }
+
+        $(function() {$('[data-toggle="tooltip"]').tooltip()});
+
+        // JWK is set up on the server side route for /
+        var form = document.querySelector('#my-sample-form');
+        var payButton = document.querySelector('#pay-button');
+        var flexResponse = document.querySelector('#flexresponse');
+        var expMonth = document.querySelector('#expMonth');
+        var expYear = document.querySelector('#expYear');
+        var errorsOutput = document.querySelector('#errors-output');
+
+        // the capture context that was requested server-side for this transaction
+        var captureContext = @Html.Raw(Json.Serialize(@Model.flexresponse));
+
+        if(captureContext){
+            // custom styles that will be applied to each field we create using Microform
+            var myStyles = {
+                'input': {
+                    'font-size': '14px',
+                    'font-family': 'helvetica, tahoma, calibri, sans-serif',
+                    'color': '#555'
+                },
+                ':focus': { 'color': 'blue' },
+                ':disabled': { 'cursor': 'not-allowed' },
+                'valid': { 'color': '#3c763d' },
+                'invalid': { 'color': '#a94442' }
+            };
+
+            // setup
+            var flex = new Flex(captureContext);
+            var microform = flex.microform({ styles: myStyles });
+            var number = microform.createField('number', { placeholder: 'Enter card number' });
+            var securityCode = microform.createField('securityCode', { placeholder: '•••' });
+
+            number.load('#number-container');
+            securityCode.load('#securityCode-container');
+
+            payButton.addEventListener('click', function () {
+                var options = {
+                    expirationMonth: expMonth.value,
+                    expirationYear: expYear.value
+                };
+
+                microform.createToken(options, function (err, token) {
+                    if (err) {
+                        // handle error
+                        console.error(err);
+                        errorsOutput.textContent = err.message;
+                    } else {
+                        // At this point you may pass the token back to your server as you wish.
+                        // In this example we append a hidden input to the form and submit it.
+                        flexResponse.value = JSON.stringify(token);
+                        form.submit();
+                    }
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            var accessCode = document.querySelector('#accessCode').value;
+            var appName = document.querySelector('#applicationName').value;
+
+            $('.eCheck').click((e) => {
+                var applicationName = appName;
+
+                var url_destination = `/PaymentElectronicCheckDebits?accessCode=${accessCode}&applicationName=${applicationName}`;
+                window.location.href = url_destination;
+            });
+
+            var item_to_create;
+            var item_to_update;
+            var item_to_delete;
+            var accessCode = document.querySelector('#accessCode').value;
+            var customerId = document.querySelector('#customerId')?.value;
+
+            $('.history').click((e) => {
+                var applicationName = appName;
+                var payerId = document.querySelector('#payerId').value;
+
+                var url_destination = `/PaymentsHistory?payerId=${payerId}&applicationName=${applicationName}`;
+                window.location.href = url_destination;
+            });
+
+            $('.updateItem').click((e) => {
+                item_to_update = e.currentTarget.value;
+                var subs = item_to_update.toString().split(',');
+                var paymentInstrumentId = subs[0];
+                var instrumentIdentifierId = subs[1];
+                var applicationName = appName;
+                var accessCodeVal = accessCode;
+                var customer = customerId;
+
+                var url_destination = `/PaymentInstrumentUpdate?paymentInstrumentId=${paymentInstrumentId}&instrumentIdentifierId=${instrumentIdentifierId}&applicationName=${applicationName}&customerId=${customer}&accessCode=${accessCodeVal}`;
+                window.location.href = url_destination;
+            });
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var applicationName = appName;
+                window.location.href = `/PaymentInstrumentDelete?id=${item_to_delete}&applicationName=${applicationName}`;
+            });
+        });
+
+</script>

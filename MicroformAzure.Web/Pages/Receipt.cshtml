@@ -1,0 +1,61 @@
+﻿@page
+@model MicroformAzure.Web.Pages.ReceiptModel
+@{
+}
+
+<style>
+    .td-1 {
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+</style>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            @*<h1>Receipt</h1>
+                <table class="table">
+                <thead>
+                <tr>
+                <th scope="col">Key</th>
+                <th scope="col">value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr scope="row">
+                <td>PaymentResponse</td>
+                <td>
+                </td>
+                </tr>
+                </tbody>
+                </table>*@
+
+            <p>
+                <label>Transaction Id</label>
+                @Model.Id
+            </p>
+
+            <p>
+                <label>Customer Id</label>
+                @Model.Customerid
+            </p>
+
+            <p>
+                <label>Payment Instrument Id</label>
+                @Model.Paymentinstrumentid
+            </p>
+
+            <p>
+                <label>Instrument Identifier Id</label>
+                @Model.Instrumentidentifierid
+            </p>
+
+            <p>
+                <label>Status</label>
+                @Model.Status
+            </p>
+            <a href="./" class="btn btn-primary">Ok</a>
+        </div>
+    </div>
+</div>

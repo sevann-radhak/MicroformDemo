@@ -1,0 +1,66 @@
+﻿@page
+@model MicroformAzure.Web.Pages.TokenModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<style>
+    .td-1 {
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+</style>
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <form id="my-token-form" method="post">
+                <h1>Token</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr scope="row">
+                            <td>Transient Token</td>
+                            <td>
+                                @Model.TransientToken
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <input type="hidden" id="accessCode" name="accessCode" asp-for="AccessCode">
+                <input type="hidden" id="address" name="address" asp-for="Address">
+                <input type="hidden" id="administrativeArea" name="administrativeArea" asp-for="AdministrativeArea">
+                <input type="hidden" id="flexresponse" name="flexresponse">
+                <input type="hidden" id="email" name="email" asp-for="Email">
+                <input type="hidden" id="firstName" name="firstName" asp-for="FirstName">
+                <input type="hidden" id="lastName" name="lastName" asp-for="LastName">
+                <input type="hidden" id="locality" name="locality" asp-for="Locality">
+                <input type="hidden" id="postalCode" name="postalCode" asp-for="PostalCode">
+                <input type="hidden" id="transientToken" name="transientToken" asp-for="TransientToken">
+                <input type="hidden" id="applicationName" name="applicationName" asp-for="ApplicationName">
+
+                <button type="button" id="pay-button" class="btn btn-primary">Confirm Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var payButton = document.querySelector('#pay-button');
+    var flexResponse = document.querySelector('#flexresponse');
+    var form = document.querySelector('#my-token-form');
+
+    payButton.addEventListener('click', function() {
+        var token = @Html.Raw(Model.TransientToken);
+        console.log(token);
+        flexResponse.value = JSON.stringify(token);
+        form.submit();
+    });
+</script>

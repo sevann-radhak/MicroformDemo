@@ -1,0 +1,60 @@
+﻿@page
+@model MicroformAzure.Web.Pages.SuccessPaymentModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <h1 style="text-align: center"><strong> Payment Website Response </strong> </h1>
+
+            <div class="container pt-5 row justify-content-center">
+                <div class="col-auto">
+                    <table class="table table-hover table-responsive table-striped" style="align-content: center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ApplicationName)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UserId)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Model.ApplicationName
+                                </td>
+
+                                <td>
+                                    @Model.UserId
+                                </td>
+
+                                <td>
+                                    @Model.Status
+                                </td>
+
+                                <td>
+                                    @Model.Amount
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

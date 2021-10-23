@@ -1,0 +1,122 @@
+﻿@page
+@model MicroformAzure.Web.Pages.PaymentElectronicCheckDebitsModel
+@{
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <h1 style="text-align: center">Electronic Check Debits<strong></strong></h1>
+
+            <div class="container py-5 col-md-8">
+                <form method="post">
+
+                    <div class="p-1 rounded" style="border: 1px solid #560bad">
+                        <div class="form-group">
+                            <label for="billToFirstName"><h6>First Name</h6></label>
+                            <input asp-for="Payment.BillToFirstName" class="form-control" name="billToFirstName" placeholder="First Name" type="text" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="billToLastName"><h6>Last Name</h6></label>
+                            <input asp-for="Payment.BillToLastName" class="form-control" name="billToLastName" placeholder="Last Name" type="text" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="billToEmail"> <h6>Email</h6> </label>
+                            <input asp-for="Payment.BillToEmail" class="form-control" name="billToEmail" placeholder="Email" type="text" required />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="billToAddress1"><h6>Address</h6></label>
+                                    <input asp-for="Payment.BillToAddress1" class="form-control" name="billToAddress1" placeholder="Address" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group mb-4">
+                                    <label for="billToPostalCode"> <h6>Postal Code</h6> </label>
+                                    <input asp-for="Payment.BillToPostalCode" class="form-control" name="billToPostalCode" placeholder="Postal Code" type="text" required />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group mb-4">
+                                    <label for="billToAdministrativeArea"><h6>Prov./State</h6></label>
+                                    <input asp-for="Payment.BillToAdministrativeArea" class="form-control" name="billToAdministrativeArea" placeholder="Prov./State" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="billToLocality"> <h6>City</h6> </label>
+                                    <input asp-for="Payment.BillToLocality" class="form-control" name="billToLocality" placeholder="City" type="text" required />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group mb-4">
+                                    <label for="billToCountry"> <h6>Country</h6> </label>
+                                    <input asp-for="Payment.BillToCountry" class="form-control" name="billToCountry" placeholder="Country" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group mb-4">
+                                    <label for="bankAccountType"> <h6>Bank Account Type</h6> </label>
+                                    <input asp-for="Payment.BankAccountType" class="form-control" name="bankAccountType" type="text" value="C" readonly required />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group mb-4">
+                                    <label for="bankAccountNumber"><h6>Bank Account Number</h6></label>
+                                    <input asp-for="Payment.BankAccountNumber" class="form-control" name="bankAccountNumber" type="text" value="4100" readonly required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <label for="bankRoutingNumber"><h6>Bank Routing Number</h6></label>
+                                <input asp-for="Payment.BankRoutingNumber" class="form-control" name="bankRoutingNumber" type="text" value="071923284" readonly required />
+                            </div>
+                    </div>
+                    
+                    <input type="hidden" id="accessCode" name="accessCode" asp-for="Payment.AccessCode">
+                    <input type="hidden" id="applicationName" name="applicationName" asp-for="ApplicationName">
+
+                    <div class="mt-5">
+                        <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm"> Pay </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#PaymentInstrumentsTable').DataTable();
+        $(".alert").fadeTo(5000, 500).slideUp(500, function () {
+            $(".alert-dismissible").alert('close');
+        });
+    });
+</script>
+}

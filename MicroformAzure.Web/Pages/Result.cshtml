@@ -1,0 +1,23 @@
+﻿@page
+@model ResultModel
+@{
+    ViewData["Title"] = "Message";
+}
+
+
+
+
+
+<p>
+    <strong>Message:</strong> <code>@Model.Message</code>
+</p>
+<form id="my-form" method="post">
+    <button type="button" id="pay-button" onclick="returnClose()" class="btn btn-primary">Close </button>
+</form>
+<script>
+    function returnClose() {
+        //var form = document.querySelector('#my-form');
+        window.close();
+
+    }
+</script>

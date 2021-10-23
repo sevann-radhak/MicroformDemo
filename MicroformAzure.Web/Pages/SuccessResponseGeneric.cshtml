@@ -1,0 +1,44 @@
+﻿@page
+@using Newtonsoft.Json
+@model MicroformAzure.Web.Pages.SuccessResponseGenericModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="container card @Model.ApplicationName">
+    <div class="card-body">
+        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+            <h1 class="text-success" style="text-align: center"><strong> Success! </strong> </h1>
+
+            <pre>
+                @Model.GenericObject;
+            </pre>
+
+            @if (!string.IsNullOrEmpty(Model.UrlRedirectAfterPayment))
+            {
+                <div>
+                    <label>@Model.UrlRedirectAfterPayment</label>
+                    <button class="btn btn-primary redirectToPayment text-white" value="@Model.UrlRedirectAfterPayment"> Go </button>
+                    <input type="hidden" id="urlRedirectAfterPayment" name="urlRedirectAfterPayment" asp-for="@Model.UrlRedirectAfterPayment">
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var urlRedirectAfterPayment = document.querySelector('#urlRedirectAfterPayment').value;
+
+        var url_destination = `${urlRedirectAfterPayment}`;
+        window.location.href = url_destination;
+
+        $('.redirectToPayment').click((e) => {
+            var url_destination = `${urlRedirectAfterPayment}`;
+            window.location.href = url_destination;
+        });
+    });
+
+</script>

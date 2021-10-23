@@ -1,0 +1,67 @@
+﻿@page
+@model MicroformAzure.Web.Pages.IndexModel
+@{
+}
+
+<div class="form-group">
+    <label for="username">
+        <h6>Card Owner</h6>
+    </label>
+    <input type="text" name="username" placeholder="Card Owner Name" required class="form-control ">
+</div>
+
+<div class="form-group">
+    <label for="cardNumber">
+        <h6>Card number</h6>
+    </label>
+    <div class="input-group">
+        <div id="number-container" name="number-container" class="form-control"></div>
+        <div class="input-group-append">
+            <span class="input-group-text text-muted">
+                <i class="fab fa-cc-visa mx-1"></i>
+                <i class="fab fa-cc-mastercard mx-1"></i>
+                <i class="fab fa-cc-amex mx-1"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-group">
+            <label>
+                <span class="hidden-xs">
+                    <h6>Expiration Date</h6>
+                </span>
+            </label>
+
+            <div class="input-group">
+                <select id="expMonth" placeholder="MM" class="form-control">
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+
+                <input type="number" id="expYear" placeholder="YYYY" name="" class="form-control" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="form-group mb-4">
+            <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
+                <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+            </label>
+            <div id="securityCode-container" class="form-control"></div>
+        </div>
+    </div>
+</div>
